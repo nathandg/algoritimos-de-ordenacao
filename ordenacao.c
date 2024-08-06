@@ -42,6 +42,42 @@ void selection_sort(int arr[], int n) {
     }
 }
 
+void quick_sort(int arr[], int n) {
+    if (n <= 1) return; // Caso base: array de tamanho 0 ou 1 já está ordenado
+
+    int i = 0, j = n - 1;
+    int x = arr[n / 2]; // Escolha do pivô
+
+    // Particionamento
+    while (i <= j) {
+        while (arr[i] < x) {
+            i++;
+        }
+
+        while (arr[j] > x) {
+            j--;
+        }
+
+        if (i <= j) {
+            // Troca de elementos
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            i++;
+            j--;
+        }
+    }
+
+    // Recursão para as subpartições
+    if (j > 0) {
+        quick_sort(arr, j + 1);
+    }
+
+    if (i < n) {
+        quick_sort(arr + i, n - i);
+    }
+}
+ 
 void gerar_array(int arr[], int tamanho, char *caso) {
     if (strcmp(caso, "melhor") == 0) {
         for (int i = 0; i < tamanho; i++) {
@@ -81,7 +117,8 @@ int main() {
             clock_t inicio = clock();
             // insertion_sort(arr, tamanho);
             // bubble_sort(arr, tamanho);
-            selection_sort(arr, tamanho);
+            // selection_sort(arr, tamanho);
+            quick_sort(arr, tamanho);
             clock_t fim = clock();
 
             tempos[j] = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
