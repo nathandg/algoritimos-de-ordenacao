@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <stdbool.h>
 
 void bubble_sort(int arr[], int n) {
     for (int i = 0; i < n - 1; i++) {
@@ -134,6 +135,121 @@ void mergeSort(int arr[], int l, int r) {
     }
 }
 
+void heapsort(int a[], int n) {
+   int i = n / 2, pai, filho, t;
+   while(1) {
+      if (i > 0) {
+          i--;
+          t = a[i];
+      } else {
+          n--;
+          if (n <= 0) return;
+          t = a[n];
+          a[n] = a[0];
+      }
+      pai = i;
+      filho = i * 2 + 1;
+      while (filho < n) {
+          if ((filho + 1 < n)  &&  (a[filho + 1] > a[filho]))
+              filho++;
+          if (a[filho] > t) {
+             a[pai] = a[filho];
+             pai = filho;
+             filho = pai * 2 + 1;
+          } else {
+             break;
+          }
+      }
+      a[pai] = t;
+   }
+}
+
+void shellSort(int *vet, int size) {
+    int i, j, value;
+ 
+    int h = 1;
+    while(h < size) {
+        h = 3*h+1;
+    }
+
+    while (h > 0) {
+        for(i = h; i < size; i++) {
+            value = vet[i];
+            j = i;
+            while (j > h-1 && value <= vet[j - h]) {
+                vet[j] = vet[j - h];
+                j = j - h;
+            }
+            vet[j] = value;
+        }
+        h = h/3;
+    }
+}
+
+void countSort(int inputArray[], int N) {
+  
+    // Finding the maximum element of 
+    // array inputArray[]
+    int M = 0;
+    for (int i = 0; i < N; i++)
+        if (inputArray[i] > M)
+            M = inputArray[i];
+    
+    // Initializing countArray[] with 0
+    int* countArray = (int*)calloc(M + 1, sizeof(int));
+    
+    // Mapping each element of inputArray[] 
+    // as an index of countArray[] array
+    for (int i = 0; i < N; i++)
+        countArray[inputArray[i]]++;
+    
+    // Calculating prefix sum at every index
+    // of array countArray[]
+    for (int i = 1; i <= M; i++)
+        countArray[i] += countArray[i - 1];
+    
+    // Creating outputArray[] from countArray[] array
+    int* outputArray = (int*)malloc(N * sizeof(int));
+    for (int i = N - 1; i >= 0; i--) {
+        outputArray[countArray[inputArray[i]] - 1] = inputArray[i];
+        countArray[inputArray[i]]--;
+    }
+    
+    // Copying sorted elements back to inputArray[]
+    for (int i = 0; i < N; i++)
+        inputArray[i] = outputArray[i];
+    
+    // Freeing dynamically allocated memory
+    free(countArray);
+    free(outputArray);
+}
+
+// Function to check if an array is sorted
+bool is_sorted(int *a, int n) {
+    while (--n >= 1) {
+        if (a[n] < a[n - 1])
+            return false;
+    }
+    return true;
+}
+
+// Function to shuffle the elements of an array
+void shuffle(int *a, int n) {
+    int i, t, r;
+    for (i = 0; i < n; i++) {
+        t = a[i];
+        r = rand() % n;
+        a[i] = a[r];
+        a[r] = t;
+    }
+}
+
+// BogoSort function to sort an array
+void bogosort(int *a, int n) {
+    while (!is_sorted(a, n))
+        shuffle(a, n);
+}
+
 void gerar_array(int arr[], int tamanho, char *caso) {
     if (strcmp(caso, "melhor") == 0) {
         for (int i = 0; i < tamanho; i++) {
@@ -172,11 +288,15 @@ int main() {
             gerar_array(arr, tamanho, caso);
 
             clock_t inicio = clock();
-            bubble_sort(arr, tamanho);
+            // bubble_sort(arr, tamanho);
             // insertion_sort(arr, tamanho);
             // selection_sort(arr, tamanho);
             // quick_sort(arr, tamanho);
             // mergeSort(arr, 0, tamanho - 1);
+            // heapsort(arr, tamanho);
+            // shellSort(arr, tamanho);
+            // countSort(arr, tamanho);
+            bogosort(arr, tamanho);
             clock_t fim = clock();
 
             tempos[j] = ((double)(fim - inicio)) / (CLOCKS_PER_SEC / 1000); 
