@@ -172,17 +172,18 @@ int main() {
             gerar_array(arr, tamanho, caso);
 
             clock_t inicio = clock();
+            bubble_sort(arr, tamanho);
             // insertion_sort(arr, tamanho);
-            // bubble_sort(arr, tamanho);
             // selection_sort(arr, tamanho);
             // quick_sort(arr, tamanho);
-            mergeSort(arr, 0, tamanho - 1);
+            // mergeSort(arr, 0, tamanho - 1);
             clock_t fim = clock();
 
-            tempos[j] = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+            tempos[j] = ((double)(fim - inicio)) / (CLOCKS_PER_SEC / 1000); 
+            // printf("Tamanho: %d, Caso: %s, Tempo: %.6f ms\n", tamanho, caso, tempos[j]);
         }
 
-        printf("| %d | %.6f seg. | %.6f seg. | %.6f seg. |\n", tamanho, tempos[0], tempos[1], tempos[2]);
+        printf("| %d | %.6f ms | %.6f ms | %.6f ms |\n", tamanho, tempos[0], tempos[1], tempos[2]);
         free(arr);
     }
 
